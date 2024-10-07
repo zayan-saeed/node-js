@@ -409,7 +409,7 @@ let products=[
   ]
 
 //Users
-let user=[{"id":1,"first_name":"Lyon","last_name":"Enever","email":"lenever0@flickr.com","password":"hE3?Q="},
+let users=[{"id":1,"first_name":"Lyon","last_name":"Enever","email":"lenever0@flickr.com","password":"hE3?Q="},
     {"id":2,"first_name":"Angil","last_name":"Mountfort","email":"amountfort1@princeton.edu","password":"rF4}C/Zj"},
     {"id":3,"first_name":"Christi","last_name":"Bellward","email":"cbellward2@bloglovin.com","password":"nL4#g"},
     {"id":4,"first_name":"Kristopher","last_name":"Ioselev","email":"kioselev3@creativecommons.org","password":"dL1)O?"},
@@ -478,6 +478,36 @@ app.put('/products/:id', (req, res) => {
   const updatedProduct = { ...products[productIndex], ...req.body };
   products[productIndex] = updatedProduct;
   res.json(updatedProduct);
+});
+
+app.get('/users', (req, res) => {
+  res.json(users);
+});
+
+// GET /users/:id - Get a specific user by id
+app.get('/users/:id', (req, res) => {
+  const user = users.find(u => u.id === parseInt(req.params.id));
+  if (!user) return res.status(404).send('User not found');
+  res.json(user);
+});
+
+// POST /users - Add a new user
+app.post('/users', (req, res) => {
+  const user = {
+      id: users.length + 1,  // Simple auto-increment ID logic
+      ...req.body
+  };
+  users.push(user);
+  res.status(201).json(user);
+});
+
+// PUT /users/:id - Update an existing user
+app.put('/users/:id', (req, res) => {
+  const user = users.find(u => u.id === parseInt(req.params.id));
+  if (!user) return res.status(404).send('User not found');
+
+  Object.assign(user, req.body); // Update user with new data
+  res.json(user);
 });
 
 // Start the server
